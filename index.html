@@ -89,6 +89,13 @@ const trinkets=[
 ["Counter Vial","Esquiva e lança uma rajada contra o atacante se for atingida enquanto prepara um frasco.","Ossex","Ataque"]
 ];
 const weapons=[["Nightstar","Chicote e maça de alcance médio; ataques aéreos ampliam o alcance."],["Whisper and Vesper","Adagas gêmeas com a maior velocidade de ataque."],["Blaststrike Maul","Martelo pesado com golpe explosivo carregável."],["Guardian Casket","Escudo para bloquear e aparar, com oportunidades ofensivas após o parry."],["Battery Buster","Blaster de modos alternáveis; ataques corpo a corpo carregam seu disparo." ]];
+const weaponDetails={
+"Nightstar":{place:"Introdução / Ossex / Loner's Landing",method:"É uma das três armas iniciais escolhidas a bordo do navio. Se não escolhida, pode ser comprada em Legovich's Arms, em Ossex, ou encontrada no naufrágio de Loner's Landing.",reward:"Melhorias: Dread Mace (baú no Courtyard de Ossex, rota norte pelo Bowery; exige superar a barreira de 5 Vials e o Paladin Lion) e Afterstrike (baú no navio naufragado em Loner's Landing)."},
+"Whisper and Vesper":{place:"Introdução / Ossex / Loner's Landing",method:"É uma das três armas iniciais escolhidas a bordo do navio. Se não escolhida, pode ser comprada em Legovich's Arms, em Ossex, ou encontrada no naufrágio de Loner's Landing.",reward:"Melhorias: Lunging Cut (passagem secreta no Foyer de Queensbury Crypt, golpeie a parede à esquerda do grande vaso) e Throwing Dagger (baú no navio naufragado em Loner's Landing)."},
+"Blaststrike Maul":{place:"Introdução / Ossex / Nox's Bayou / Loner's Landing",method:"É uma das três armas iniciais escolhidas a bordo do navio. Se não escolhida, pode ser comprada em Legovich's Arms, em Ossex, ou encontrada no naufrágio de Loner's Landing.",reward:"Melhorias: Boom Charge (baú na Swamp Shack de Big Lagoon, atrás de uma fechadura Kear) e Spin Rush (baú no navio naufragado em Loner's Landing)."},
+"Guardian Casket":{place:"Ossex / Septemburg / Coltrane Peak",method:"Compre de Legovich em Ossex depois de derrotar Armand na forja abaixo da loja.",reward:"Melhorias: Coffin Toss (varanda do segundo andar do prédio azul no canto inferior esquerdo de Crow Town, Septemburg) e Grave Counter (baú no Rail Yard de Coltrane Peak)."},
+"Battery Buster":{place:"Ossex / Astral Orrery / Bone Beach",method:"Compre de Legovich em Ossex depois de derrotar Armand na forja abaixo da loja.",reward:"Melhorias: Burst Shot (Astral Orrery, duas plataformas abaixo da área principal após a seção de gelo) e Charge Swing (Dreadworm's Maw, em Bone Beach, na tela Worm's Back acessada pelos corais azuis)."}
+};
 const sidearms=["Angler's Raft","Beckoning Collar","Bounding Bombs","Deflector Parasol","Drill Driver","Dynamo Lantern","Fishing Rod","Fog Thrower","Gnawing Ghosts","Gyro Dagger","Hollower's Rocks","Iron Steed","Mist Jar","Recall Disc","Volt Hatchet"];
 const trinketMethods={
 "Lace Glove":"Ajude Ack e Dak no evento deles nas Southern Outskirts. A referência também indica que o item pode aparecer em mais de um ponto dessa área.",
@@ -460,7 +467,7 @@ const bossDetails={
 function recordFor(id){
 let parts=id.split("-"),k=parts[0],i=Number(parts[1]);if(!Number.isInteger(i))return null;let x=null;
 if(k==="trinket"&&trinkets[i])x={name:trinkets[i][0],desc:trinkets[i][1],place:trinkets[i][2],type:trinkets[i][3],method:trinketMethods[trinkets[i][0]]||""};
-if(k==="weapon"&&weapons[i])x={name:weapons[i][0],desc:weapons[i][1],place:"Arsenal de Mina",type:"Arma principal"};
+if(k==="weapon"&&weapons[i]){let d=weaponDetails[weapons[i][0]]||{};x={name:weapons[i][0],desc:weapons[i][1],place:d.place||"Arsenal de Mina",method:d.method||"",reward:d.reward||"",type:"Arma principal"};}
 if(k==="sidearm"&&sidearms[i]){let a=sidearmAcquisition[sidearms[i]]||[];x={name:sidearms[i],desc:sidearmDetails[i]?.[1]||"Arma secundária.",place:a[0]||"A confirmar",method:a[1]||"",type:"Arma secundária"};}
 if(k==="boss"&&bosses[i]){let d=bossDetails[bosses[i]]||["A confirmar","Encontro confirmado no checklist de 100%."];x={name:bosses[i],desc:d[1],place:d[0],type:"Chefe / mini-chefe"}}
 if(k==="region"&&regions[i]){let d=regionDetails[regions[i]]||["Região","Área de Tenebrous Isle."];x={name:regions[i],desc:d[1],place:d[0],type:"Região"}}
