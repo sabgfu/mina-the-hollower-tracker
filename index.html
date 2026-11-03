@@ -392,9 +392,16 @@ return x?{...x,id}:null;
 function openDetail(id){
 let x=recordFor(id);if(!x)return;detailRecord=x;
 let concealed=!spoilers;
-let body=concealed?"Ative “Spoilers: visíveis” para revelar nome e informações deste registro.":esc(x.desc);
+let safe=(v,fallback="Não documentado")=>concealed?"Oculto":(v&&String(v).trim()?esc(v):fallback);
+let body=concealed?"Ative “Spoilers: visíveis” para revelar nome e informações deste registro.":esc(x.desc||"Descrição ainda não documentada.");
+let place=safe(x.place);
+let kind=safe(x.type);
+let status=concealed?"Oculto":(x.place&&x.place!=="A confirmar"?"Localização catalogada":"Informação pendente de verificação");
+let method=concealed?"Oculto":(x.method?esc(x.method):(x.place&&x.place!=="A confirmar"?"A região ou origem está indicada acima; o passo a passo exato ainda precisa ser confirmado.":"Método de obtenção ainda não confirmado."));
 let reward=x.reward&&!concealed?'<div class="detailmeta"><small>Recompensa / relação</small><p>'+esc(x.reward)+'</p></div>':"";
-$("#detailContent").innerHTML='<div class="eyebrow">'+(concealed?"REGISTRO COM SPOILER":esc(x.type))+'</div><h2>'+(concealed?"Registro oculto":esc(x.name))+'</h2><p class="detaildesc">'+body+'</p><div class="detailmeta"><small>Localização / origem</small><p>'+(concealed?"Oculta":esc(x.place))+'</p></div>'+reward+'<label style="display:flex;align-items:center;gap:10px;margin-top:12px"><input class="check" id="detailCheck" type="checkbox" '+(done(id)?"checked":"")+'> Marcar como concluído</label><p class="muted" style="font-size:11px">Quando a referência não fornece um detalhe, ele aparece como “a confirmar”.</p>';
+let source=concealed?"Oculta":'<a href="https://meowdb.com/db/mina-the-hollower" target="_blank" rel="noopener">MeowDB · referência comunitária</a>';
+if(!concealed&&id.startsWith("trinket-"))source+=' · <a href="https://mobalytics.gg/gamebase/guides/mina-the-hollower-trinkets-list" target="_blank" rel="noopener">Lista de efeitos e locais</a>';
+$( "#detailContent" ).innerHTML='<div class="eyebrow">'+(concealed?"REGISTRO COM SPOILER":kind)+'</div><h2>'+(concealed?"Registro oculto":esc(x.name))+'</h2><p class="detaildesc">'+body+'</p><div class="detailmeta"><small>Categoria</small><p>'+kind+'</p></div><div class="detailmeta"><small>Localização / origem</small><p>'+place+'</p></div><div class="detailmeta"><small>Como obter</small><p>'+method+'</p></div><div class="detailmeta"><small>Estado da documentação</small><p>'+status+'</p></div>'+reward+'<div class="detailmeta"><small>Referências</small><p>'+source+'</p></div><label style="display:flex;align-items:center;gap:10px;margin-top:12px"><input class="check" id="detailCheck" type="checkbox" '+(done(id)?"checked":"")+'> Marcar como concluído</label><p class="muted" style="font-size:11px">Campos sem confirmação são identificados como pendentes; não são tratados como fatos.</p>';
 $("#detailVeil").classList.add("open");
 $("#detailCheck").onchange=e=>{setDone(id,e.target.checked);render();openDetail(id)};
 }
