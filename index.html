@@ -340,7 +340,7 @@ function genericRecords(kind){let data=kind==="enemies"?enemies.map(x=>[x,enemyD
 function entry(id,name,desc,tag="",place=""){
 let hidden=!spoilers;
 let checkbox=(id.startsWith("enemy-")||id.startsWith("region-")||id.startsWith("npc-"))?"":'<input class="check" type="checkbox" data-id="'+esc(id)+'" '+(done(id)?"checked":"")+'>';
-return '<div class="entry '+(done(id)?"done":"")+'">'+checkbox+'<span class="entrybody" data-detail="'+esc(id)+'"><span class="entrytitle '+(hidden?"spoiler-name":"")+'">'+(hidden?"Registro oculto":esc(name))+'</span><span class="entrydesc '+(hidden?"spoiler-name":"")+'">'+(hidden?"Revele os spoilers para consultar este registro.":esc(desc||"Registro catalogado"))+'</span>'+(tag?'<span class="tag">'+esc(tag)+'</span>':"")+'</span></div>';
+return '<div class="entry '+(done(id)?"done":"")+'">'+checkbox+'<span class="entrybody" data-detail="'+esc(id)+'"><span class="entrytitle '+(hidden?"spoiler-name":"")+'">'+(hidden?"Registro oculto":esc(name))+'</span><span class="entrydesc '+(hidden?"spoiler-name":"")+'">'+(hidden?"Revele os spoilers para consultar este registro.":esc(desc||"Registro catalogado"))+'</span>'+(!hidden&&tag?'<span class="tag">'+esc(tag)+'</span>':"")+'</span></div>';
 }
 const bossDetails={
 "Hulk Trooper":["Southern Outskirts","Mini-chefe: versão maior e mais forte do Shock Trooper, com alcance e mobilidade ampliados."],
