@@ -184,7 +184,7 @@ const songsData=[
 const navMeta={home:["Início","TENEBROUS ISLE / INÍCIO"],checklist:["Checklist 100%","PROGRESSÃO / CHECKLIST"],trinkets:["Bugigangas","DATABASE / BUGIGANGAS"],weapons:["Armas","DATABASE / ARMAS"],sidearms:["Armas secundárias","DATABASE / ARMAS SECUNDÁRIAS"],bosses:["Chefes","DATABASE / CHEFES"],enemies:["Inimigos","DATABASE / INIMIGOS"],regions:["Regiões","DATABASE / REGIÕES"],collectibles:["Colecionáveis","DATABASE / COLECIONÁVEIS"],endings:["Epílogos","PROGRESSÃO / EPÍLOGOS"],fish:["Pesca","EXPLORAÇÃO / PESCA"],songs:["Songscrolls","COLEÇÃO / MÚSICAS"],quests:["Missões & minijogos","PROGRESSÃO / MISSÕES"],upgrades:["Melhorias","PROGRESSÃO / MELHORIAS"],achievements:["Conquistas","PROGRESSÃO / CONQUISTAS"],map:["Mapa interativo","EXPLORAÇÃO / MAPA"]};
 const KEY="mina-compendium-v7";
 let saved={};try{
-saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem("mina-compendium-v3")||localStorage.getItem("mina-compendium-v2")||"{}")||{};
+saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem("mina-compendium-v6")||localStorage.getItem("mina-compendium-v5")||localStorage.getItem("mina-compendium-v4")||localStorage.getItem("mina-compendium-v3")||localStorage.getItem("mina-compendium-v2")||"{}")||{};
 }catch(e){saved={}}
 let page="home",spoilers=false,filter="Todos",query="",detailRecord=null;
 
@@ -200,14 +200,51 @@ function genericRecords(kind){let data=kind==="enemies"?enemies.map(x=>[x,"Regis
 function entry(id,name,desc,tag="",place=""){
 let hidden=(id.startsWith("boss-")||id.startsWith("quest-"))&&!spoilers;
 return '<div class="entry '+(done(id)?"done":"")+'">'+(id.startsWith("enemy-")||id.startsWith("region-")?"":'<input class="check" type="checkbox" data-id="'+esc(id)+'" '+(done(id)?"checked":"")+">')+'<span class="entrybody" data-detail="'+esc(id)+'"><span class="entrytitle '+(hidden?"spoiler-name":"")+'">'+(hidden?"Encontro desconhecido":esc(name))+'</span><span class="entrydesc '+(hidden?"spoiler-name":"")+'">'+(hidden?"Revele os spoilers para consultar este registro.":esc(desc||"Registro catalogado"))+'</span>'+(tag?'<span class="tag">'+esc(tag)+'</span>':"")+'</span></div>'}
+const bossDetails={
+"Hulk Trooper":["Southern Outskirts","Mini-chefe: versão maior e mais forte do Shock Trooper, com alcance e mobilidade ampliados."],
+"Thorne":["Ossex","Antagonista recorrente; seus encontros pontuam a história e começam após a introdução."],
+"The Duchess of Queensbury":["Queensbury Crypt","Chefe no fim da cripta; a figura que aguarda o Duke em seu túmulo."],
+"Midden":["Ancestral Chamber / Queensbury Crypt","Chefe opcional. A luta é iniciada por uma opção de diálogo de insulto; derrota concede Fly Bait."],
+"Nox's Beast":["Nox's Bayou","Chefe principal da região pantanosa."],
+"Madd House":["Kindlewood","A própria casa de Papa Madd é o chefe; derrotá-la libera a loja de Papa Madd."],
+"The Carving Man":["Septemburg","Chefe ligado à perseguição e ao resgate das crianças de Septemburg."],
+"Major Miner":["Bone Beach","Chefe de Bone Beach."],
+"Mined Mind":["Bone Beach","Chefe do Spark Generator de Bone Beach."],
+"Frozen Horror":["Coltrane Peak","Chefe do Spark Generator de Coltrane Peak."],
+"Mirren":["Coltrane Peak","Chefe secreto fantasma em uma carruagem abandonada em Frostbite Woods."],
+"Orrery Warden":["Astral Orrery","Guardião encontrado na região do Astral Orrery."],
+"The Congealed":["Astral Orrery","Chefe principal do Astral Orrery, no fim do Hall of Scholars."],
+"Furgus The Faithful":["Radiant Manor","Chefe mordomo da Radiant Manor."],
+"Patchling":["Septemburg","Encontro de chefe catalogado na região de Septemburg."],
+"Nether Kraken":["Introdução / naufrágio","Chefe opcional da introdução; concede Uranium Bracelet e pode ser perdido nessa primeira oportunidade."],
+"Astromancer":["Astral Orrery","Encontro de chefe catalogado no Astral Orrery; detalhes de combate ainda em atualização."],
+"Sparkmancer":["Astral Orrery","Encontro de chefe catalogado no Astral Orrery; detalhes de combate ainda em atualização."],
+"Malady":["Nox's Bayou","Encontro catalogado em Nox's Bayou; detalhes de combate ainda em atualização."],
+"Skullpox":["Queensbury Crypt","Encontro catalogado em Queensbury Crypt; detalhes de combate ainda em atualização."],
+"Smorgasboar":["Septemburg","Encontro catalogado em Septemburg; detalhes de combate ainda em atualização."],
+"Dark Deluxy":["Windy Generator / Septemburg","Chefe opcional. Requer dois Spark Containers e escolta de Luxy até a arena."],
+"Baron Lionel":["Radiant Manor","Duelo contra o Barão na Radiant Manor; combina golpes marciais e ataques de leão."],
+"Wonder Willis":["Music Hall / Ossex","Chefe secreto ligado à sequência de missões do Music Hall."],
+"Evra The Undying":["Goddred's Grave","Chefe secreto que invoca esqueletos e monta um cavalo morto-vivo."],
+"Mock Moon":["Nox's Bayou","Chefe no fim do Moonlit Path."],
+"Locomotress Agnes":["Frozen Trainyard / Coltrane Peak","Chefe do trem desgovernado; Mina luta sobre os vagões enquanto Agnes a persegue."],
+"Lumenarks":["Astral Orrery","Encontro de chefe cultista no Astral Orrery."],
+"Radiant Lionel":["Radiant Manor","Encontro final de Lionel na Radiant Manor."],
+"Armand":["Legovich's Arms / Ossex","Chefe opcional da loja de ferreiro; tentar uma segunda compra inicia o confronto."],
+"Maxi":["Ossex","Chefe opcional que embosca Mina ao retornar à cidade pela estrada leste após Queensbury Crypt."],
+"Dugin":["Southern Outskirts","Chefe opcional associado ao pedido de Ack e Dak; aparece em localizações variáveis."],
+"Thalassion":["Fishing Hole","Superchefe-peixe opcional da cadeia de pesca; guarda a melhoria final da Gilded Rod."],
+"Radiant Thorne":["Radiant Manor","Encontro de chefe listado na Radiant Manor."],
+"Ack & Dak":["Southern Outskirts","Luta contra a dupla Ack e Dak."]
+};
 function recordFor(id){
-let m=id.match(/^(trinket|weapon|sidearm|boss|region|enemy|quest|achievement|upgrade|collectible)-(\\d+)$/);if(!m)return null;let i=+m[2],k=m[1],x=null;
+let m=id.match(/^([a-z]+)-(\\d+)$/);if(!m)return null;let i=Number(m[2]),k=m[1],x=null;
 if(k==="trinket"&&trinkets[i])x={name:trinkets[i][0],desc:trinkets[i][1],place:trinkets[i][2],type:trinkets[i][3]};
 if(k==="weapon"&&weapons[i])x={name:weapons[i][0],desc:weapons[i][1],place:"Arsenal de Mina",type:"Arma principal"};
 if(k==="sidearm"&&sidearms[i])x={name:sidearms[i],desc:sidearmDetails[i]?.[1]||"Arma secundária.",place:"Várias regiões",type:"Arma secundária"};
-if(k==="boss"&&bosses[i])x={name:bosses[i],desc:"Chefe ou mini-chefe confirmado na lista de 35 encontros.",place:"Região conforme checklist de referência",type:"Chefe / mini-chefe"};
+if(k==="boss"&&bosses[i]){let d=bossDetails[bosses[i]]||["A confirmar","Encontro confirmado no checklist de 100%."];x={name:bosses[i],desc:d[1],place:d[0],type:"Chefe / mini-chefe"}}
 if(k==="region"&&regions[i])x={name:regions[i],desc:"Região principal de Tenebrous Isle. Consulte o mapa interativo para salas e pontos de interesse.",place:"Tenebrous Isle",type:"Região"};
-if(["enemy","quest","achievement","upgrade","collectible","ending","fish","song"].includes(k)){let data=genericRecords(({enemy:"enemies",quest:"quests",achievement:"achievements",upgrade:"upgrades",collectible:"collectibles",ending:"endings",fish:"fish",song:"songs"})[k]);if(data[i])x={...data[i]};}
+if(["enemy","quest","achievement","upgrade","collectible","ending","fish","song"].includes(k)){let map={enemy:"enemies",quest:"quests",achievement:"achievements",upgrade:"upgrades",collectible:"collectibles",ending:"endings",fish:"fish",song:"songs"};let data=genericRecords(map[k]);if(data[i])x={...data[i]};}
 return x?{...x,id}:null;
 }
 function openDetail(id){
