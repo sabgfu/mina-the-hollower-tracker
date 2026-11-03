@@ -393,7 +393,7 @@ function openDetail(id){
 let x=recordFor(id);if(!x)return;detailRecord=x;
 let concealed=(id.startsWith("boss-")||id.startsWith("quest-"))&&!spoilers;
 let body=concealed?"Ative “Spoilers: visíveis” para revelar nome e informações deste registro.":esc(x.desc);
-let reward=x.reward?'<div class="detailmeta"><small>Recompensa / relação</small><p>'+esc(x.reward)+'</p></div>':"";
+let reward=x.reward&&!concealed?'<div class="detailmeta"><small>Recompensa / relação</small><p>'+esc(x.reward)+'</p></div>':"";
 $("#detailContent").innerHTML='<div class="eyebrow">'+(concealed?"REGISTRO COM SPOILER":esc(x.type))+'</div><h2>'+(concealed?"Registro oculto":esc(x.name))+'</h2><p class="detaildesc">'+body+'</p><div class="detailmeta"><small>Localização / origem</small><p>'+(concealed?"Oculta":esc(x.place))+'</p></div>'+reward+'<label style="display:flex;align-items:center;gap:10px;margin-top:12px"><input class="check" id="detailCheck" type="checkbox" '+(done(id)?"checked":"")+'> Marcar como concluído</label><p class="muted" style="font-size:11px">Quando a referência não fornece um detalhe, ele aparece como “a confirmar”.</p>';
 $("#detailVeil").classList.add("open");
 $("#detailCheck").onchange=e=>{setDone(id,e.target.checked);render();openDetail(id)};
