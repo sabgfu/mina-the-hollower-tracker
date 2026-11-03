@@ -1,0 +1,16 @@
+{
+  "name": "Mina the Hollower Tracker",
+  "short_name": "Mina Tracker",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#111518",
+  "theme_color": "#15191d",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
