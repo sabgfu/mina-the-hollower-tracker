@@ -1,4 +1,4 @@
-const CACHE="mina-compendium-v11";
+const CACHE="mina-compendium-v12";
 const ASSETS=["./","./index.html","./manifest.webmanifest","./icon.svg"];
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
