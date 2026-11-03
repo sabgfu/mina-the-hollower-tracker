@@ -206,8 +206,23 @@ const collectiblesData=[
 const sidearmDetails=[
 ["Angler's Raft","Implanta uma jangada flutuante para atravessar lagos e rios largos."],["Beckoning Collar","Invoca um diabrete aliado, útil para inimigos voadores ou esquivos; causa dano constante em alvos grandes."],["Bounding Bombs","Arremessa duas bombas que precisam se encontrar para causar o dano completo."],["Deflector Parasol","Pode ser arremessado para causar dano, bloquear projéteis e refletir ataques físicos; segurado acima da cabeça permite planar."],["Drill Driver","Lança Mina para a frente com forte impacto; empurra inimigos pequenos em fossos e causa dano extra ao prensá-los contra paredes."],["Dynamo Lantern","Arremessa uma lanterna presa a uma corrente que libera várias descargas elétricas no ponto mais alto."],["Fishing Rod","Revela sombras de peixes em qualquer água, inclusive poças; permite pescar itens, criaturas e recompensas."],["Fog Thrower","Libera uma nuvem contínua que atinge inimigos presos nela."],["Gnawing Ghosts","Dispara um projétil de longo alcance; a façanha Haunting Reach confirma alcance de 25 blocos."],["Gyro Dagger","Adaga giratória que retorna como bumerangue e pode atingir várias vezes; ataques podem rebatê-la para manter o dano."],["Hollower's Rocks","Arremessa pedras de curto a médio alcance que podem quicar sobre a água."],["Iron Steed","Bicicleta que se move mais rápido que caminhar ou escavar e pode saltar; tocar a campainha agita inimigos."],["Mist Jar","Mina fica verde e avança uma longa distância no chão ou no ar; atravessar inimigos recupera um pouco de vida."],["Recall Disc","Primeiro uso cria um portal; o próximo teleporta Mina de volta com uma explosão poderosa."],["Volt Hatchet","Machado arremessado em arco que explode em ondas elétricas nas quatro direções ao atingir o chão."]
 ];
-
-
+const sidearmAcquisition={
+"Angler's Raft":["Várias regiões aquáticas","Encontrada como drop no mundo; a referência consultada não aponta uma sala única."],
+"Beckoning Collar":["Queensbury Crypt","Encontre nas áreas de Queensbury Crypt."],
+"Bounding Bombs":["Western Wilds / Molten Foundry","Encontre na região de Western Wilds, na área da Foundry."],
+"Deflector Parasol":["Southern Outskirts","Procure na caverna a leste de Ossex, perto da entrada de Queensbury."],
+"Drill Driver":["Eastern Heath / Buckler's Bluff","Encontre em Buckler's Bluff, na primeira região a leste de Ossex."],
+"Dynamo Lantern":["Septemburg","Drop raro de inimigos/objetos na região de Septemburg."],
+"Fishing Rod":["Nox's Bayou / Backwaters","Pegue emprestada com os irmãos aligátor Irwin e Durwin; depois disso, a vara passa a aparecer como item encontrado no mundo."],
+"Fog Thrower":["Várias regiões","Encontrada como drop no mundo; a fonte não identifica uma sala específica."],
+"Gnawing Ghosts":["Regiões avançadas","Drop no mundo em uma área de fim de jogo; a sala exata ainda não foi confirmada."],
+"Gyro Dagger":["Introdução / Ossex","Drop fixo perto do primeiro chefe; também aparece com frequência na região de Ossex."],
+"Hollower's Rocks":["Cavernas iniciais","Encontrada em cavernas nas primeiras áreas."],
+"Iron Steed":["Ossex / Bowery","Compre do comerciante em Bowery, Ossex."],
+"Mist Jar":["Nox's Bayou","Procure na área escondida do pântano em Nox's Bayou."],
+"Recall Disc":["Bone Beach / Sandfalls","Encontre na região de Sandfalls."],
+"Volt Hatchet":["Southern Outskirts / Ossex","Drop comum em lanternas nas áreas iniciais, incluindo Southern Outskirts e arredores de Ossex."]
+};
 const endingsData=[
 ["Astral Orrery","Seeking a New Frontier","Cartão de epílogo regional."],
 ["Nox's Bayou","The Waters Run Clear Again","Cartão de epílogo regional."],
@@ -446,7 +461,7 @@ function recordFor(id){
 let parts=id.split("-"),k=parts[0],i=Number(parts[1]);if(!Number.isInteger(i))return null;let x=null;
 if(k==="trinket"&&trinkets[i])x={name:trinkets[i][0],desc:trinkets[i][1],place:trinkets[i][2],type:trinkets[i][3],method:trinketMethods[trinkets[i][0]]||""};
 if(k==="weapon"&&weapons[i])x={name:weapons[i][0],desc:weapons[i][1],place:"Arsenal de Mina",type:"Arma principal"};
-if(k==="sidearm"&&sidearms[i])x={name:sidearms[i],desc:sidearmDetails[i]?.[1]||"Arma secundária.",place:"Várias regiões",type:"Arma secundária"};
+if(k==="sidearm"&&sidearms[i]){let a=sidearmAcquisition[sidearms[i]]||[];x={name:sidearms[i],desc:sidearmDetails[i]?.[1]||"Arma secundária.",place:a[0]||"A confirmar",method:a[1]||"",type:"Arma secundária"};}
 if(k==="boss"&&bosses[i]){let d=bossDetails[bosses[i]]||["A confirmar","Encontro confirmado no checklist de 100%."];x={name:bosses[i],desc:d[1],place:d[0],type:"Chefe / mini-chefe"}}
 if(k==="region"&&regions[i]){let d=regionDetails[regions[i]]||["Região","Área de Tenebrous Isle."];x={name:regions[i],desc:d[1],place:d[0],type:"Região"}}
 if(["enemy","quest","achievement","upgrade","collectible","ending","fish","song","npc"].includes(k)){let map={enemy:"enemies",quest:"quests",achievement:"achievements",upgrade:"upgrades",collectible:"collectibles",ending:"endings",fish:"fish",song:"songs",npc:"npcs"};let data=genericRecords(map[k]);if(data[i])x={...data[i]};}
