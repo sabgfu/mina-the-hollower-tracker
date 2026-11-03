@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#15191d"><meta name="description" content="Checklist pessoal de progresso de Mina the Hollower">
+<link rel="manifest" href="manifest.webmanifest"><title>Mina the Hollower — Tracker</title>
+<style>
+:root{color-scheme:dark;--bg:#111518;--panel:#1c2428;--line:#344147;--text:#f2eee5;--muted:#a8b2b1;--gold:#e4b85d;--green:#8dbb91}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,-apple-system,sans-serif}header{padding:24px 18px 16px;background:#182126;border-bottom:1px solid var(--line)}h1{font-size:25px;margin:0 0 6px}p{color:var(--muted);margin:4px 0}.wrap{max-width:900px;margin:auto;padding:16px}.stats{display:flex;gap:12px;align-items:center;margin:14px 0}.bar{height:9px;background:#303a3e;border-radius:9px;overflow:hidden;flex:1}.bar>i{display:block;height:100%;background:var(--gold);width:0}button,input{font:inherit}button{background:#29363b;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:10px 13px}button:active{transform:scale(.98)}.tabs{display:flex;gap:8px;overflow:auto;margin:14px 0}.tabs button.active{border-color:var(--gold);color:var(--gold)}.tools{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tools input{flex:1;min-width:160px;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:10px}.group{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden}.group h2{font-size:17px;margin:0;padding:13px 15px;border-bottom:1px solid var(--line)}.item{display:flex;gap:12px;padding:12px 15px;border-bottom:1px solid #303a3e;align-items:flex-start}.item:last-child{border:0}.item input{accent-color:var(--gold);width:19px;height:19px;margin:2px 0 0}.item span{flex:1}.item small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.spoiler{filter:blur(5px);user-select:none}.item.revealed .spoiler{filter:none}.map{width:100%;height:65vh;border:1px solid var(--line);border-radius:12px;background:#20292d}.notice{font-size:13px;color:var(--muted);margin:10px 0 16px}footer{padding:24px;text-align:center;color:var(--muted);font-size:12px}
+</style></head>
+<body><header><div class="wrap"><h1>⛏ Mina the Hollower</h1><p>Checklist de exploração e conclusão</p><div class="stats"><strong id="count">0%</strong><div class="bar"><i id="fill"></i></div><span id="done">0/0</span></div></div></header>
+<main class="wrap"><div class="tabs"><button class="active" data-tab="list">Checklist</button><button data-tab="map">Mapa</button></div>
+<section id="list"><div class="tools"><input id="search" placeholder="Buscar item..."><button id="spoilers">Mostrar spoilers: não</button><button id="export">Exportar</button><button id="import">Importar</button><button id="reset">Zerar</button><input id="file" type="file" accept="application/json" hidden></div><p class="notice">Lista inicial de acompanhamento. O conteúdo ainda será ampliado e conferido; não representa uma checklist 100% validada do jogo.</p><div id="items"></div></section>
+<section id="map" hidden><p class="notice">O mapa externo precisa de internet. Se não carregar incorporado, abra diretamente no MapGenie.</p><button id="openmap">Abrir MapGenie em nova aba ↗</button><p></p><iframe class="map" src="https://mapgenie.io/mina-the-hollower" title="Mapa interativo de Mina the Hollower" loading="lazy"></iframe></section></main><footer>Seu progresso fica salvo neste dispositivo.</footer>
+<script>
+const data=[
+["Preparação e progresso",["Começar uma nova aventura","Concluir a aventura principal","Explorar todas as regiões"]],
+["Colecionáveis",["Encontrar rosas","Encontrar tesouros escondidos","Encontrar itens colecionáveis"]],
+["Equipamentos e melhorias",["Encontrar equipamentos","Melhorar equipamentos","Desbloquear melhorias"]],
+["Combate",["Derrotar chefes principais","Derrotar mini-chefes","Descobrir encontros secretos"]],
+["Exploração",["Encontrar áreas secretas","Abrir atalhos e passagens","Investigar pontos de interesse"]]
+];
+const key="mina-tracker-v1";let state=JSON.parse(localStorage.getItem(key)||"{}"),showSpoilers=false,tab="list";
+const $=s=>document.querySelector(s);
+function render(){let all=data.flatMap((g,i)=>g[1].map((n,j)=>({id:i+"-"+j,name:n,group:g[0]})));let completed=all.filter(x=>state[x.id]).length;$("#count").textContent=Math.round(completed/all.length*100)+"%";$("#done").textContent=completed+"/"+all.length;$("#fill").style.width=(completed/all.length*100)+"%";let q=$("#search").value.toLowerCase();$("#items").innerHTML=data.map((g,i)=>{let rows=g[1].map((n,j)=>({id:i+"-"+j,name:n})).filter(x=>x.name.toLowerCase().includes(q));if(!rows.length)return "";return '<div class="group"><h2>'+g[0]+'</h2>'+rows.map(x=>'<label class="item"><input type="checkbox" data-id="'+x.id+'" '+(state[x.id]?'checked':'')+'><span '+(showSpoilers?'':'')+'>'+x.name+'</span></label>').join("")+'</div>'}).join("");$("#items").querySelectorAll("input").forEach(el=>el.addEventListener("change",()=>{state[el.dataset.id]=el.checked;localStorage.setItem(key,JSON.stringify(state));render()}))}
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));$("#list").hidden=tab!=="list";$("#map").hidden=tab!=="map"});
+$("#search").oninput=render;$("#spoilers").onclick=()=>{showSpoilers=!showSpoilers;$("#spoilers").textContent="Mostrar spoilers: "+(showSpoilers?"sim":"não")};
+$("#reset").onclick=()=>{if(confirm("Apagar todo o progresso salvo?")){state={};localStorage.removeItem(key);render()}};
+$("#export").onclick=()=>{let a=document.createElement("a"),u=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:"application/json"}));a.href=u;a.download="mina-tracker-backup.json";a.click();URL.revokeObjectURL(u)};
+$("#import").onclick=()=>$("#file").click();$("#file").onchange=async e=>{try{state=JSON.parse(await e.target.files[0].text());localStorage.setItem(key,JSON.stringify(state));render()}catch{alert("Arquivo de backup inválido")}};
+$("#openmap").onclick=()=>window.open("https://mapgenie.io/mina-the-hollower","_blank","noopener");
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));render();
+</script></body></html>
