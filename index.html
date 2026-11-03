@@ -90,6 +90,69 @@ const trinkets=[
 ];
 const weapons=[["Nightstar","Chicote e maça de alcance médio; ataques aéreos ampliam o alcance."],["Whisper and Vesper","Adagas gêmeas com a maior velocidade de ataque."],["Blaststrike Maul","Martelo pesado com golpe explosivo carregável."],["Guardian Casket","Escudo para bloquear e aparar, com oportunidades ofensivas após o parry."],["Battery Buster","Blaster de modos alternáveis; ataques corpo a corpo carregam seu disparo." ]];
 const sidearms=["Angler's Raft","Beckoning Collar","Bounding Bombs","Deflector Parasol","Drill Driver","Dynamo Lantern","Fishing Rod","Fog Thrower","Gnawing Ghosts","Gyro Dagger","Hollower's Rocks","Iron Steed","Mist Jar","Recall Disc","Volt Hatchet"];
+const trinketMethods={
+"Lace Glove":"Ajude Ack e Dak no evento deles nas Southern Outskirts. A referência também indica que o item pode aparecer em mais de um ponto dessa área.",
+"Twill Weave":"Procure no início de Nox's Bayou; a localização exata é indicada como uma descoberta de exploração.",
+"Smelling Salts":"Encontre em Eastern Heath, na área Frozen Pass.",
+"Brisk Brew":"Compre de Lady Susan no Trinket Bazaar, em Ossex.",
+"Seismic Belt":"Compre de Lady Susan no Trinket Bazaar, em Ossex.",
+"Plasma Funnel":"Compre de Lady Susan no Trinket Bazaar, em Ossex.",
+"Deboning Wand":"Recompensa de Elizabeth, em Ossex.",
+"Steady Soles":"Abra o baú encontrado após a área Attic, em Ossex.",
+"Valor Medallion":"Ajude Furl e Roma em sua sequência de missão em Ossex.",
+"Bell of Grace":"Recompensa de Frayd, em Ossex.",
+"Willow the Wisp":"Compre na barraca Poppit de Eastern Heath.",
+"Helio the Wisp":"Compre na barraca Poppit de Western Wilds.",
+"Keri the Wisp":"Recompensa da barraca Poppit nas Southern Outskirts, perto de Bone Beach Trail.",
+"Windfall Charm":"Recompensa de Lad em Eastern Heath.",
+"Chain Capacitor":"Recompensa de Wrecker na Choppe Shoppe, em Eastern Heath.",
+"Spike Spurs":"Encontre o baú no Spike Vault, em Knight's Rest.",
+"Desperation Bonnet":"Encontre em uma tumba na região de Mourner's Mile.",
+"Stolenoid":"Compre de Belvedere, em Queensbury Crypt.",
+"Fly Bait":"Recompensa por derrotar Midden, em Queensbury Crypt.",
+"Proto Spark":"Recompensa do Duke após a sequência relacionada ao caixão, em Queensbury Crypt.",
+"Primed Vial Pouch":"Procure no porão das Southern Outskirts.",
+"Flame Guard":"Encontre na Molten Foundry, em Western Wilds.",
+"Spark Catcher":"Compre de Pinky em Backwaters.",
+"Evasion Powder":"Use a escada de Pinky para alcançar o baú elevado em Backwaters.",
+"Vascular Syrup":"Procure perto de Big Lagoon, em Nox's Bayou.",
+"Pit Preserver":"Compre da Kindly Hag na Swamp Shack, em Nox's Bayou.",
+"Iron Lung":"Recompensa por derrotar Mock Moon em Nox's Bayou.",
+"Tumbling Tutu":"Ajude Cliff, o sapo, a reencontrar sua banda em Backwaters.",
+"Glutton's Jug":"Fale com Buffo em Backwaters para receber a jarra temporária. Equipe-a e derrote 50 inimigos para enchê-la; devolva-a para iniciar a evolução para Plasma Jug.",
+"Plasma Jug":"Depois de encher Glutton's Jug derrotando 50 inimigos, devolva-a a Buffo e vença a luta contra ele.",
+"Uranium Bracelet":"Pode ser obtida ao derrotar Nether Kraken na introdução ou comprada posteriormente no Trinket Bazaar de Ossex.",
+"Bubble Ring":"Compre de Lady Susan depois que o Trinket Bazaar de Ossex expandir.",
+"Shock Flint":"Compre de Lady Susan depois que o Trinket Bazaar de Ossex expandir.",
+"Intravenous Vial":"Compre de Lady Susan depois que o Trinket Bazaar de Ossex expandir.",
+"Pneumatic Armlet":"Recompensa do encontro com Wonder Willis no Music Hall, em Ossex.",
+"Starving Beastium":"Acesse a área secreta ligada à Mina's Grave, em Mourner's Mile, pela porta que exige três Sparks.",
+"Draining Beastium":"Desbloqueie a loja de Papa Madd ao concluir Madd House, em Kindlewood; depois compre o item.",
+"Reckless Beastium":"Recompensa de Dr. Naught em Mirror's End.",
+"Volatile Beastium":"Compre durante a viagem de trem entre Bone Beach e Nox's Bayou.",
+"Burning Beastium":"Encontre em Coltrane Peak.",
+"Warding Beastium":"Procure no pátio de Ossex, pela saída leste.",
+"Dummy Cache":"Procure em Western Wilds, após avançar pela rota de Coltrane Peak.",
+"Blinking Glass":"Recompensa por derrotar Mirren em Coltrane Peak.",
+"Watchful Eye":"Compre de Rupert em Coltrane Peak.",
+"Bridge Weaver":"Abra o baú em Astral Orrery.",
+"Vial Salvo":"Compre de Tubert em Astral Orrery.",
+"Dodging Pendulum":"Derrote o Mimic em Radiant Manor.",
+"Spring Heels":"Compre do comerciante Trooper em Radiant Manor.",
+"Wallower's Gauntlets":"Abra o baú em Kindlewood, na rota de Wallower's Path.",
+"Oozing Organ":"Desbloqueie a loja de Papa Madd ao concluir Madd House, em Kindlewood; depois compre o item.",
+"Voltaic Guard":"Desbloqueie a loja de Papa Madd ao concluir Madd House, em Kindlewood; depois compre o item.",
+"Repulsing Root":"Compre de Corvidden em Crow Town, Septemburg.",
+"Lightning Grip":"Recompensa da sequência dos Campfire Kids em Septemburg/Kindlewood; também pode aparecer na loja de Lady Susan após a expansão do bazar.",
+"Dead Leaf":"Recompensa de Leaf em Western Wilds.",
+"Niter Belt":"Encontre em Sandfalls, em Bone Beach.",
+"Bellows Bustle":"Vença as três corridas organizadas por Blaise: Sandfalls, Ossex e Western Wilds.",
+"Tunneling Codex":"Recompensa do Ring Master no Ring Dive Parlor, em Sandfalls; a referência consultada indica a pontuação-alvo de 5.000 pontos.",
+"Joule Syringe":"Encontre no baú de tesouro em Bone Beach.",
+"Polyp Lamp":"Compre em uma loja de Sandfalls, em Bone Beach.",
+"Thermal Pack":"Recompensa de Fiancé na área Miner's Den, em Ossex.",
+"Counter Vial":"Compre de Lady Susan depois que o Trinket Bazaar de Ossex expandir."
+};
 const bosses=["Hulk Trooper","Thorne","The Duchess of Queensbury","Midden","Nox's Beast","Madd House","The Carving Man","Major Miner","Mined Mind","Frozen Horror","Mirren","Orrery Warden","The Congealed","Furgus The Faithful","Patchling","Nether Kraken","Astromancer","Sparkmancer","Malady","Skullpox","Smorgasboar","Dark Deluxy","Baron Lionel","Wonder Willis","Evra The Undying","Mock Moon","Locomotress Agnes","Lumenarks","Radiant Lionel","Armand","Maxi","Dugin","Thalassion","Radiant Thorne","Ack & Dak"];
 const regions=["Ossex","Queensbury Crypt","Nox's Bayou","Septemburg","Bone Beach","Coltrane Peak","Astral Orrery"];
 
@@ -381,7 +444,7 @@ const bossDetails={
 };
 function recordFor(id){
 let parts=id.split("-"),k=parts[0],i=Number(parts[1]);if(!Number.isInteger(i))return null;let x=null;
-if(k==="trinket"&&trinkets[i])x={name:trinkets[i][0],desc:trinkets[i][1],place:trinkets[i][2],type:trinkets[i][3]};
+if(k==="trinket"&&trinkets[i])x={name:trinkets[i][0],desc:trinkets[i][1],place:trinkets[i][2],type:trinkets[i][3],method:trinketMethods[trinkets[i][0]]||""};
 if(k==="weapon"&&weapons[i])x={name:weapons[i][0],desc:weapons[i][1],place:"Arsenal de Mina",type:"Arma principal"};
 if(k==="sidearm"&&sidearms[i])x={name:sidearms[i],desc:sidearmDetails[i]?.[1]||"Arma secundária.",place:"Várias regiões",type:"Arma secundária"};
 if(k==="boss"&&bosses[i]){let d=bossDetails[bosses[i]]||["A confirmar","Encontro confirmado no checklist de 100%."];x={name:bosses[i],desc:d[1],place:d[0],type:"Chefe / mini-chefe"}}
