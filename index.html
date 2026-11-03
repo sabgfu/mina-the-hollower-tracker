@@ -161,20 +161,21 @@ function persist(){localStorage.setItem(KEY,JSON.stringify(saved))}
 function genericRecords(kind){let data=kind==="enemies"?enemies.map(x=>[x,"Inimigo catalogado no banco de dados da comunidade. Localização ou comportamento ainda não descritos na ficha resumida.","A confirmar","Inimigo"]):kind==="quests"?questsData:kind==="achievements"?achievementsData:kind==="upgrades"?upgradesData:kind==="collectibles"?collectiblesData:[];let prefix={enemies:"enemy",quests:"quest",achievements:"achievement",upgrades:"upgrade",collectibles:"collectible"}[kind];return data.map((x,i)=>({id:prefix+"-"+i,name:x[0],desc:x[1],place:x[2]||"A confirmar",tag:x[3]||kind,type:x[3]||kind,reward:x[4]||""}))}
 
 function entry(id,name,desc,tag="",place=""){
-let hidden=id.startsWith("boss-")&&!spoilers;
+let hidden=(id.startsWith("boss-")||id.startsWith("quest-"))&&!spoilers;
 return '<div class="entry '+(done(id)?"done":"")+'"><input class="check" type="checkbox" data-id="'+esc(id)+'" '+(done(id)?"checked":"")+'><span class="entrybody" data-detail="'+esc(id)+'"><span class="entrytitle '+(hidden?"spoiler-name":"")+'">'+(hidden?"Encontro desconhecido":esc(name))+'</span><span class="entrydesc '+(hidden?"spoiler-name":"")+'">'+(hidden?"Revele os spoilers para consultar este registro.":esc(desc||"Registro catalogado"))+'</span>'+(tag?'<span class="tag">'+esc(tag)+'</span>':"")+'</span></div>'}
 function recordFor(id){
-let m=id.match(/^(trinket|weapon|sidearm|boss|region)-(\d+)$/);if(!m)return null;let i=+m[2],k=m[1],x=null;
+let m=id.match(/^(trinket|weapon|sidearm|boss|region|enemy|quest|achievement|upgrade|collectible)-(\\d+)$/);if(!m)return null;let i=+m[2],k=m[1],x=null;
 if(k==="trinket"&&trinkets[i])x={name:trinkets[i][0],desc:trinkets[i][1],place:trinkets[i][2],type:trinkets[i][3]};
 if(k==="weapon"&&weapons[i])x={name:weapons[i][0],desc:weapons[i][1],place:"Arsenal de Mina",type:"Arma principal"};
-if(k==="sidearm"&&sidearms[i])x={name:sidearms[i],desc:"Entrada catalogada. Efeito detalhado e localização ainda precisam de verificação.",place:"A confirmar",type:"Arma secundária"};
-if(k==="boss"&&bosses[i])x={name:bosses[i],desc:"Encontro catalogado. Estratégia, localização e recompensa ainda precisam de verificação.",place:"A confirmar",type:"Chefe / encontro"};
-if(k==="region"&&regions[i])x={name:regions[i],desc:"Região catalogada. Salas, segredos e objetivos ainda precisam de verificação.",place:"Área de exploração",type:"Região"};
+if(k==="sidearm"&&sidearms[i])x={name:sidearms[i],desc:sidearmDetails[i]?.[1]||"Arma secundária.",place:"Várias regiões",type:"Arma secundária"};
+if(k==="boss"&&bosses[i])x={name:bosses[i],desc:"Chefe ou mini-chefe confirmado na lista de 35 encontros.",place:"Região conforme checklist de referência",type:"Chefe / mini-chefe"};
+if(k==="region"&&regions[i])x={name:regions[i],desc:"Região principal de Tenebrous Isle. Consulte o mapa interativo para salas e pontos de interesse.",place:"Tenebrous Isle",type:"Região"};
+if(["enemy","quest","achievement","upgrade","collectible"].includes(k)){let data=genericRecords(({enemy:"enemies",quest:"quests",achievement:"achievements",upgrade:"upgrades",collectible:"collectibles"})[k]);if(data[i])x={...data[i]};}
 return x?{...x,id}:null;
 }
 function openDetail(id){
 let x=recordFor(id);if(!x)return;detailRecord=x;
-let concealed=id.startsWith("boss-")&&!spoilers;
+let concealed=(id.startsWith("boss-")||id.startsWith("quest-"))&&!spoilers;
 $("#detailContent").innerHTML='<div class="eyebrow">'+(concealed?"REGISTRO COM SPOILER":esc(x.type))+'</div><h2>'+(concealed?"Encontro desconhecido":esc(x.name))+'</h2><p class="detaildesc">'+(concealed?"Ative “Spoilers: visíveis” para revelar nome e informações deste encontro.":esc(x.desc))+'</p><div class="detailmeta"><small>Localização</small><p>'+(concealed?"Oculta":esc(x.place))+'</p></div><label style="display:flex;align-items:center;gap:10px;margin-top:12px"><input class="check" id="detailCheck" type="checkbox" '+(done(id)?"checked":"")+'> Marcar como concluído</label><p class="muted" style="font-size:11px">Detalhes não verificados são identificados como “a confirmar”; não contam como guia completo.</p>';
 $("#detailVeil").classList.add("open");
 $("#detailCheck").onchange=e=>{setDone(id,e.target.checked);render();openDetail(id)};
