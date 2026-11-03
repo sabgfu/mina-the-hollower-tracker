@@ -396,6 +396,19 @@ const enemyDetails={
 "Witch Grub":["Septemburg","Larva crescida e amaldiçoada encontrada perto de Septemburg."],
 "Wraither":["Queensbury Crypt","Inimigo fantasmagórico das catacumbas."]
 };
+const bossMethods={
+"Armand":"Tente comprar uma segunda arma em Legovich's Arms, em Ossex. A recusa leva à carta de Armand e inicia o confronto na forja abaixo da loja. Vencer restaura o funcionamento normal da ferraria e libera Guardian Casket e Battery Buster.",
+"Dark Deluxy":"Encontre a arena do lado de fora do Windy Generator. A porta exige dois Sparks e só abre depois de obter dois Spark Containers; acompanhe Luxy de volta pela porta para iniciar a luta.",
+"Dugin":"Procure o pequeno chefe em pontos variáveis das Southern Outskirts. É necessário derrotá-lo duas vezes para receber Lace Glove.",
+"Evra The Undying":"Explore Goddred's Grave, uma mini-masmorra acessada pelo Courtyard de Septemburg. A luta concede uma Health Rose.",
+"Maxi":"Depois de concluir Queensbury Crypt, volte a entrar em Ossex pela estrada leste para ativar a emboscada. A vitória concede uma Trinket Bag.",
+"Midden":"Em Queensbury Crypt, abra a porta que exige dois Plasma Vials e escolha a opção de diálogo de insulto para iniciar a luta. A vitória concede Fly Bait.",
+"Mirren":"Encontre a carruagem abandonada em Frostbite Woods, Coltrane Peak. Mirren também aparece como NPC de missão; oferecer ajuda desencadeia o confronto.",
+"Nether Kraken":"Após a sequência de abertura, volte ao convés superior do navio naufragado em Loner's Landing para iniciar o chefe opcional. A vitória concede Uranium Bracelet; se não enfrentado, pode ser recuperado mais tarde no Trinket Bazaar.",
+"Mock Moon":"Siga Moonlit Path em Nox's Bayou até a arena do chefe. A vitória concede Iron Lung.",
+"Wonder Willis":"Complete a sequência de Willis e acesse o Music Hall em Bowery, Ossex. Vença o duelo de dança empurrando-o contra a plateia para receber Pneumatic Armlet.",
+"Thalassion":"Complete o Fish Board, obtendo todos os troféus de pesca, para liberar o superchefe no Fishing Hole. A vitória concede a melhoria Gilded Rod."
+};
 const regionDetails={
 "Ossex":["Hub central","Centro da ilha; concentra lojas, Trinket Chest, Underlab e os primeiros eventos da história."],
 "Queensbury Crypt":["Região 1","Cemitério e catacumbas onde os mortos se levantaram; o Duke procura seu amor perdido."],
@@ -469,7 +482,7 @@ let parts=id.split("-"),k=parts[0],i=Number(parts[1]);if(!Number.isInteger(i))re
 if(k==="trinket"&&trinkets[i])x={name:trinkets[i][0],desc:trinkets[i][1],place:trinkets[i][2],type:trinkets[i][3],method:trinketMethods[trinkets[i][0]]||""};
 if(k==="weapon"&&weapons[i]){let d=weaponDetails[weapons[i][0]]||{};x={name:weapons[i][0],desc:weapons[i][1],place:d.place||"Arsenal de Mina",method:d.method||"",reward:d.reward||"",type:"Arma principal"};}
 if(k==="sidearm"&&sidearms[i]){let a=sidearmAcquisition[sidearms[i]]||[];x={name:sidearms[i],desc:sidearmDetails[i]?.[1]||"Arma secundária.",place:a[0]||"A confirmar",method:a[1]||"",type:"Arma secundária"};}
-if(k==="boss"&&bosses[i]){let d=bossDetails[bosses[i]]||["A confirmar","Encontro confirmado no checklist de 100%."];x={name:bosses[i],desc:d[1],place:d[0],type:"Chefe / mini-chefe"}}
+if(k==="boss"&&bosses[i]){let d=bossDetails[bosses[i]]||["A confirmar","Encontro confirmado na lista de chefes."];x={name:bosses[i],desc:d[1],place:d[0],method:bossMethods[bosses[i]]||"",type:"Chefe / mini-chefe"}}
 if(k==="region"&&regions[i]){let d=regionDetails[regions[i]]||["Região","Área de Tenebrous Isle."];x={name:regions[i],desc:d[1],place:d[0],type:"Região"}}
 if(["enemy","quest","achievement","upgrade","collectible","ending","fish","song","npc"].includes(k)){let map={enemy:"enemies",quest:"quests",achievement:"achievements",upgrade:"upgrades",collectible:"collectibles",ending:"endings",fish:"fish",song:"songs",npc:"npcs"};let data=genericRecords(map[k]);if(data[i])x={...data[i]};}
 return x?{...x,id}:null;
@@ -488,6 +501,7 @@ let source=concealed?"Oculta":'<a href="https://meowdb.com/db/mina-the-hollower"
 if(!concealed&&id.startsWith("trinket-"))source+=' · <a href="https://mobalytics.gg/gamebase/guides/mina-the-hollower-trinkets-list" target="_blank" rel="noopener">Lista de efeitos e locais</a>';
 if(!concealed&&id.startsWith("sidearm-"))source+=' · <a href="https://mina-the-hollower.wiki/sidearms" target="_blank" rel="noopener">Guia de sidearms e locais</a>';
 if(!concealed&&id.startsWith("weapon-"))source+=' · <a href="https://meowdb.com/db/mina-the-hollower/weapons" target="_blank" rel="noopener">Guia de armas e melhorias</a>';
+if(!concealed&&id.startsWith("boss-"))source+=' · <a href="https://meowdb.com/db/mina-the-hollower/bosses" target="_blank" rel="noopener">Guia de chefes e requisitos</a>';
 $( "#detailContent" ).innerHTML='<div class="eyebrow">'+(concealed?"REGISTRO COM SPOILER":kind)+'</div><h2>'+(concealed?"Registro oculto":esc(x.name))+'</h2><p class="detaildesc">'+body+'</p><div class="detailmeta"><small>Categoria</small><p>'+kind+'</p></div><div class="detailmeta"><small>Localização / origem</small><p>'+place+'</p></div><div class="detailmeta"><small>Como obter</small><p>'+method+'</p></div><div class="detailmeta"><small>Estado da documentação</small><p>'+status+'</p></div>'+reward+'<div class="detailmeta"><small>Referências</small><p>'+source+'</p></div><label style="display:flex;align-items:center;gap:10px;margin-top:12px"><input class="check" id="detailCheck" type="checkbox" '+(done(id)?"checked":"")+'> Marcar como concluído</label><p class="muted" style="font-size:11px">Campos sem confirmação são identificados como pendentes; não são tratados como fatos.</p>';
 $("#detailVeil").classList.add("open");
 $("#detailCheck").onchange=e=>{setDone(id,e.target.checked);render();openDetail(id)};
