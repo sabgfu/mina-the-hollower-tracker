@@ -338,7 +338,7 @@ function persist(){localStorage.setItem(KEY,JSON.stringify(saved))}
 function genericRecords(kind){let data=kind==="enemies"?enemies.map(x=>[x,enemyDetails[x]?.[1]||"Inimigo catalogado na lista de 116 inimigos da referência.",enemyDetails[x]?.[0]||"A confirmar","Inimigo"]):kind==="quests"?questsData:kind==="achievements"?achievementsData:kind==="upgrades"?upgradesData:kind==="collectibles"?collectiblesData:kind==="endings"?endingsData:kind==="fish"?fishData:kind==="songs"?songsData.map(x=>[x,"Faixa Songscroll registrada no índice da trilha sonora do jogo.","Sound Test / Phonograph","Música"]):kind==="npcs"?npcs.map(x=>[x,npcDetails[x]?.[1]||"Personagem listado na base comunitária; descrição detalhada ainda não consolidada nesta ficha.",npcDetails[x]?.[2]||"A confirmar",npcDetails[x]?.[0]||"NPC",npcDetails[x]?.[3]||""]):[];let prefix={enemies:"enemy",quests:"quest",achievements:"achievement",upgrades:"upgrade",collectibles:"collectible",endings:"ending",fish:"fish",songs:"song",npcs:"npc"}[kind];return data.map((x,i)=>({id:prefix+"-"+i,name:x[0],desc:x[1],place:kind==="achievements"?"Condição de desbloqueio":(x[2]||"A confirmar"),tag:kind==="achievements"?x[2]:(x[3]||kind),type:kind==="achievements"?x[2]:(x[3]||kind),reward:x[4]||""}))}
 
 function entry(id,name,desc,tag="",place=""){
-let hidden=(id.startsWith("boss-")||id.startsWith("quest-"))&&!spoilers;
+let hidden=!spoilers;
 let checkbox=(id.startsWith("enemy-")||id.startsWith("region-")||id.startsWith("npc-"))?"":'<input class="check" type="checkbox" data-id="'+esc(id)+'" '+(done(id)?"checked":"")+'>';
 return '<div class="entry '+(done(id)?"done":"")+'">'+checkbox+'<span class="entrybody" data-detail="'+esc(id)+'"><span class="entrytitle '+(hidden?"spoiler-name":"")+'">'+(hidden?"Registro oculto":esc(name))+'</span><span class="entrydesc '+(hidden?"spoiler-name":"")+'">'+(hidden?"Revele os spoilers para consultar este registro.":esc(desc||"Registro catalogado"))+'</span>'+(tag?'<span class="tag">'+esc(tag)+'</span>':"")+'</span></div>';
 }
@@ -391,7 +391,7 @@ return x?{...x,id}:null;
 }
 function openDetail(id){
 let x=recordFor(id);if(!x)return;detailRecord=x;
-let concealed=(id.startsWith("boss-")||id.startsWith("quest-"))&&!spoilers;
+let concealed=!spoilers;
 let body=concealed?"Ative “Spoilers: visíveis” para revelar nome e informações deste registro.":esc(x.desc);
 let reward=x.reward&&!concealed?'<div class="detailmeta"><small>Recompensa / relação</small><p>'+esc(x.reward)+'</p></div>':"";
 $("#detailContent").innerHTML='<div class="eyebrow">'+(concealed?"REGISTRO COM SPOILER":esc(x.type))+'</div><h2>'+(concealed?"Registro oculto":esc(x.name))+'</h2><p class="detaildesc">'+body+'</p><div class="detailmeta"><small>Localização / origem</small><p>'+(concealed?"Oculta":esc(x.place))+'</p></div>'+reward+'<label style="display:flex;align-items:center;gap:10px;margin-top:12px"><input class="check" id="detailCheck" type="checkbox" '+(done(id)?"checked":"")+'> Marcar como concluído</label><p class="muted" style="font-size:11px">Quando a referência não fornece um detalhe, ele aparece como “a confirmar”.</p>';
