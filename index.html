@@ -94,7 +94,9 @@ const bosses=["Hulk Trooper","Thorne","The Duchess of Queensbury","Midden","Nox'
 const regions=["Loner's Landing","Ossex","Southern Outskirts","Eastern Heath","Queensbury Crypt","Western Wilds","Kindlewood","Septemburg","Nox's Bayou","Backwaters","Sandfalls","Bone Beach","Coltrane Peak","Radiant Manor","Astral Orrery"];
 const navMeta={home:["Início","TENEBROUS ISLE / INÍCIO"],checklist:["Checklist 100%","PROGRESSÃO / CHECKLIST"],trinkets:["Bugigangas","DATABASE / BUGIGANGAS"],weapons:["Armas","DATABASE / ARMAS"],sidearms:["Armas secundárias","DATABASE / ARMAS SECUNDÁRIAS"],bosses:["Chefes","DATABASE / CHEFES"],enemies:["Inimigos","DATABASE / INIMIGOS"],regions:["Regiões","DATABASE / REGIÕES"],quests:["Missões & minijogos","PROGRESSÃO / MISSÕES"],upgrades:["Melhorias","PROGRESSÃO / MELHORIAS"],achievements:["Conquistas","PROGRESSÃO / CONQUISTAS"],map:["Mapa interativo","EXPLORAÇÃO / MAPA"]};
 const KEY="mina-compendium-v4";
-let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){saved={}}
+let saved={};try{
+saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem("mina-compendium-v3")||localStorage.getItem("mina-compendium-v2")||"{}")||{};
+}catch(e){saved={}}
 let page="home",spoilers=false,filter="Todos",query="",detailRecord=null;
 
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
